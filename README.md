@@ -16,7 +16,7 @@ Ce projet consiste à concevoir une application web proposant un quiz permettant
 -  **Langage** : Python 3.13, Javascript (ES6), HTML5, CSS3, SQL
 -  **Frameworks utilisées** :
     - Flask_restful, React.js, Bootstrap, AJAX
-- **Outils** : VS Code, Postman, SQLite Browser, MySQL Workbench, Node,js
+- **Outils** : VS Code, Postman, SQLite Browser, MySQL Workbench, Node.js
 
 ## Fonctionnement général
 
