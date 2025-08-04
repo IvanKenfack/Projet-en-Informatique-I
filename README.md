@@ -9,7 +9,7 @@ Ce projet consiste à concevoir un une application web proposant un quiz pour te
 - Mise en application des notions fondamentales,
 - Initiation à la recherche,
 - Réalisation de projets concrets,
-- Découvrir et s’initier à de nouvelles technologies,.
+- Découvrir et s’initier à de nouvelles technologies.
   
 ## Technologies et outils
 
