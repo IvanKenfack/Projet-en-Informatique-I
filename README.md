@@ -2,7 +2,7 @@
 # INF34515 – Quiz_Cétacé webApp
 
 Travail de session du cours **INF34515 – Projet en Informatique I**, Été 2025, UQAR.
-Ce projet consiste à concevoir un une application web proposant un quiz pour tester ses connaissance sur les differents sons produits par les baleines. 
+Ce projet consiste à concevoir une application web proposant un quiz permettant de tester ses connaissances sur les différents sons produits par les baleines.
 
 ## Objectifs
 
