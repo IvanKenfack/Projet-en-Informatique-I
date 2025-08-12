@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from flask_restful import Api, Resource
 import sqlite3
 
@@ -47,12 +47,59 @@ class MediaResource(Resource):
         medias = cursor.fetchall()
         connexionBD.close()
         return jsonify([dict(media) for media in medias])
+    
+class PartieResource(Resource):
+    def get(self,IdPartie):
+        """Récupère une partie spécifique par son ID"""
+        connexionBD = etablirConnexionBD()
+        cursor = connexionBD.cursor()
+        cursor.execute('SELECT IdPartie, nomJoueur, score FROM partie WHERE IdPartie = ?', (IdPartie,))
+        partie = cursor.fetchone()
+        connexionBD.close()
+        
+        if partie:
+            return jsonify(dict(partie))
+        return {'message': 'Partie non trouvée'}, 404
+    
+    def post(self):
+        """Stocke les infos d'une partie terminée"""
+        donnees = request.get_json()
+
+        if not donnees or 'nomJoueur' not in donnees or 'score' not in donnees:
+            return {'message': 'Données invalides'}, 400
+        
+        connexionBD = etablirConnexionBD()
+        cursor = connexionBD.cursor()
+
+        try:
+            cursor.execute('INSERT INTO partie (nomJoueur, score) VALUES (?, ?)', 
+                           (donnees['nomJoueur'], donnees['score']))
+            connexionBD.commit()
+            nouvel_Id = cursor.lastrowid
+
+            # On retourne un message de succès avec l'ID de la nouvelle partie
+            return {'message': 'Partie enregistrée avec succès',
+                    'IdPartie': nouvel_Id,
+                    'nomJoueur': donnees['nomJoueur'],
+                    'score': donnees['score']
+                    }, 201
+        except sqlite3.Error as e:
+
+            #On annule les modifications en cas d'erreur
+            connexionBD.rollback()
+            return {'message': 'Erreur lors de l\'enregistrement de la partie', 'erreur': str(e)}, 500
+        finally:
+            connexionBD.close()
+
+        
+
 
     
 # Configuration des routes
 api.add_resource(BaleinesResource, '/api/baleines')
 api.add_resource(BaleineResource, '/api/baleines/<int:IdBaleine>')
-api.add_resource(MediaResource, '/api/baleines/<int:IdBaleine>/media') 
+api.add_resource(MediaResource, '/api/baleines/<int:IdBaleine>/media')
+api.add_resource(PartieResource, '/api/parties', '/api/parties/<int:IdPartie>')
 
 if __name__ == '__main__':
     app.run(debug=True)
