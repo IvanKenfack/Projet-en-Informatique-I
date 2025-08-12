@@ -13,11 +13,11 @@ def etablirConnexionBD():
     return connexionBD
 
 class BaleineResource(Resource):
-    def get(self, baleine_id):
+    def get(self, IdBaleine):
         """Récupère une baleine spécifique par son ID"""
         connexionBD = etablirConnexionBD()
         cursor = connexionBD.cursor()
-        cursor.execute('SELECT baleineId, nomCommun, nomScientifique FROM baleines WHERE baleineId = ?', (baleine_id,))
+        cursor.execute('SELECT IdBaleine, nomCommun, nomScientifique FROM baleines WHERE IdBaleine = ?', (IdBaleine,))
         baleine = cursor.fetchone()
         connexionBD.close()
         
@@ -31,7 +31,7 @@ class BaleinesResource(Resource):
         """Récupère toutes les baleines"""
         conn = etablirConnexionBD()
         cursor = conn.cursor()
-        cursor.execute('SELECT baleineId, nomCommun, nomScientifique FROM baleines')
+        cursor.execute('SELECT IdBaleine, nomCommun, nomScientifique FROM baleines')
         baleines = cursor.fetchall()
         conn.close()
         return jsonify([dict(baleine) for baleine in baleines])
@@ -39,11 +39,11 @@ class BaleinesResource(Resource):
 
     
 class MediaResource(Resource):
-    def get(self, baleine_id):
+    def get(self, IdBaleine):
         """Récupère tous les médias d'une baleine spécifique"""
         connexionBD = etablirConnexionBD()
         cursor = connexionBD.cursor()
-        cursor.execute('SELECT mediaId, cheminImage, cheminAudio, baleineId FROM media WHERE baleineId = ?', (baleine_id,))
+        cursor.execute('SELECT IdMedia, typeMedia, cheminFichier, IdBaleine FROM media WHERE IdBaleine = ?', (IdBaleine,))
         medias = cursor.fetchall()
         connexionBD.close()
         return jsonify([dict(media) for media in medias])
@@ -51,8 +51,8 @@ class MediaResource(Resource):
     
 # Configuration des routes
 api.add_resource(BaleinesResource, '/api/baleines')
-api.add_resource(BaleineResource, '/api/baleines/<int:baleine_id>')
-api.add_resource(MediaResource, '/api/baleines/<int:baleine_id>/media') 
+api.add_resource(BaleineResource, '/api/baleines/<int:IdBaleine>')
+api.add_resource(MediaResource, '/api/baleines/<int:IdBaleine>/media') 
 
 if __name__ == '__main__':
     app.run(debug=True)
