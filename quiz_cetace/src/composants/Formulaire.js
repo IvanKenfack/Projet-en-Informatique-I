@@ -15,7 +15,7 @@ import {faPlay} from '@fortawesome/free-solid-svg-icons';
 function Formulaire(){
     return(
         <>
-             <div className='container mt-5 p-5 rounded' data-bs-theme="light"style={{backgroundColor: '#f1f1f7'}}>
+             <div className='container p-5 rounded' data-bs-theme="light"style={{backgroundColor: '#f1f1f7'}}>
                 <Form>
                     <Col xs="auto">
                     <Form.Label htmlFor="inlineFormInput">

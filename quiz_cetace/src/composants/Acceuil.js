@@ -8,7 +8,7 @@ import Formulaire from './Formulaire';
 function Acceuil() {
   return (
     <>
-        <div className='container mt-5 p-5 rounded'>
+        <div className='container mt-3 p-5 rounded'>
             <h1 className='text-center mt-5'>
                     <FontAwesomeIcon icon={faWater} className='me-2' fade/>
                     Bienvenue sur QuizCétacé
@@ -22,7 +22,7 @@ function Acceuil() {
                 Vous aurez 10 secondes pour répondre à chaque question. Bonne chance!
             </p>
         </div>
-        <div className='container mt-5 p-5 rounded' data-bs-theme="light" style={{backgroundColor: '#f1f1f7'}}>
+        <div className='container mt-3 p-5 rounded' data-bs-theme="light" style={{backgroundColor: '#f1f1fa'}}>
             <h3 className='text-center'>Pour commencer, veuillez remplir le formulaire ci-dessous:</h3>
             <Formulaire />
         </div>
