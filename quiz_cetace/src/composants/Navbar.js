@@ -3,26 +3,31 @@ import Navbar from 'react-bootstrap/Navbar';
 import monLogo from '../images/monLogo.svg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {faLinkedin} from '@fortawesome/free-brands-svg-icons';
+import { faGithub } from '@fortawesome/free-brands-svg-icons';
 
 function BarNavigation() {
   return (
     <>
-      <Navbar className="bg-body-secondary">
+      <Navbar className='navBar-perso' expand="lg">
         <Container>
-          <Navbar.Brand href="#home">
+          <Navbar.Brand href="www.instagram.com/zitraaf/#" className="text-light">
             <img
               src={monLogo}
               width="40"
               height="40"
               className="d-inline-block align-top"
-              alt=""
+              alt="Logo de QuizCétacé"
+              
             />
-            {' '}QuizCétacé
+            
           </Navbar.Brand>     
-          <Navbar.Text>
+          <Navbar.Text className="text-light">
             <p>&copy; 2025 IvanKenfack {' '}
                <a href="https://www.linkedin.com/in/ivan-kenfack-425392221/" target="_blank" rel="noopener noreferrer">
-               <FontAwesomeIcon  icon={faLinkedin} size="1x" color="#0A66C2" />
+               <FontAwesomeIcon  icon={faLinkedin} color="#0b77e4" />
+              </a>
+              <a href="https://github.com/IvanKenfack/" target="_blank" rel="noopener noreferrer">
+               <FontAwesomeIcon icon={faGithub} color="#0b77e4"/>
               </a>
             </p>
 
