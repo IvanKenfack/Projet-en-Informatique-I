@@ -1,13 +1,15 @@
 
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import BrandExample from "./composants/Navbar";
+import BarNavigation from "./composants/Navbar";
+import Formulaire from "./composants/Formulaire";
 
 
 function App() {
   return (
     <>
-    <BrandExample />
+    <BarNavigation />
+    <Formulaire />
     </>
   );
 }
