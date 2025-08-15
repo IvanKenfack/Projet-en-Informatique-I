@@ -40,8 +40,8 @@ function Formulaire(){
                     </Col>
                     <Col xs="auto">
                     </Col>
-                    <Col xs="auto">
-                    <Button type="submit" className="mb-2">
+                    <Col xs="auto" className="d-flex justify-content-center">
+                    <Button type="submit" className="mb-1 mt-3 ">
                         <FontAwesomeIcon icon={faPlay} className="me-2" />
                         Commencer le quiz
                     </Button>
