@@ -8,7 +8,7 @@ import { faGithub } from '@fortawesome/free-brands-svg-icons';
 function BarNavigation() {
   return (
     <>
-      <Navbar className='navBar-perso' expand="lg">
+      <Navbar className='navBar-perso fixed-top' expand="lg">
         <Container>
           <Navbar.Brand href="www.instagram.com/zitraaf/#" className="text-light">
             <img

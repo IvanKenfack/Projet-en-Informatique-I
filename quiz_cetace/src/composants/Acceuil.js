@@ -30,7 +30,7 @@ function Acceuil() {
         <div className='container-fluid mt-3 p-5 rounded'>
             <h3 className='text-center'>Quelques scores récents:</h3>
             <Carousel_ />
-        </div>
+         </div>
        
     </>
   );
