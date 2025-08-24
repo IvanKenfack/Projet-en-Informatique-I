@@ -3,12 +3,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faWater } from '@fortawesome/free-solid-svg-icons';
 import Formulaire from './Formulaire';
 import Carousel_ from './AutreScores';
-
+import BarNavigation from "./Navbar";
 
 
 function Acceuil() {
   return (
     <>
+        <BarNavigation />
         <div className='container mt-3 p-5 rounded'>
             <h1 className='text-center mt-5'>
                     <FontAwesomeIcon icon={faWater} className='me-2' fade/>

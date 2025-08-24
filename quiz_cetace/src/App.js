@@ -1,15 +1,33 @@
 
-import './App.css';
+//import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import BarNavigation from "./composants/Navbar";
 import Acceuil from "./composants/Acceuil";
+import Quiz from "./composants/Quiz";
+import {
+    BrowserRouter,
+    Routes,
+    Route,
+} from "react-router-dom";
+
+
 
 
 function App() {
+
   return (
     <>
-    <BarNavigation />
-    <Acceuil />
+    <BrowserRouter>
+                <Routes>
+                    <Route
+                        path="/"
+                        element={<Acceuil />}
+                    />
+                    <Route
+                        path="/Quiz"
+                        element={<Quiz />}
+                    />
+                </Routes>
+    </BrowserRouter>
     </>
   );
 }

@@ -1,5 +1,3 @@
-import { use, useEffect } from 'react';
-import Holder from 'holderjs';
 import Carousel from 'react-bootstrap/Carousel'; 
 
 function Carousel_() {

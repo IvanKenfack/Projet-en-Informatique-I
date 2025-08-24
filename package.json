@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "holderjs": "^2.9.9"
+    "holderjs": "^2.9.9",
+    "react-router-dom": "^7.8.1"
   }
 }

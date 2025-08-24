@@ -8,11 +8,20 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {faUser} from '@fortawesome/free-solid-svg-icons';
 import {faUser as faUserRegular} from '@fortawesome/free-regular-svg-icons';
 import {faPlay} from '@fortawesome/free-solid-svg-icons';
-
-
+import {useNavigate} from 'react-router-dom';
 
 
 function Formulaire(){
+
+    const navigate = useNavigate();
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        // Logique pour traiter le formulaire
+
+        navigate('./Quiz');
+    };
+
     return(
         <>
              <div className='container p-5 rounded' data-bs-theme="light"style={{backgroundColor: '#f1f1f7'}}>
@@ -41,7 +50,7 @@ function Formulaire(){
                     <Col xs="auto">
                     </Col>
                     <Col xs="auto" className="d-flex justify-content-center">
-                    <Button type="submit" className="mb-1 mt-3 ">
+                    <Button type="submit" className="mb-1 mt-3" onClick={handleSubmit}>
                         <FontAwesomeIcon icon={faPlay} className="me-2" />
                         Commencer le quiz
                     </Button>

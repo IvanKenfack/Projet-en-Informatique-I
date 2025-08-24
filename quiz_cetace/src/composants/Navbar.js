@@ -4,13 +4,16 @@ import monLogo from '../images/monLogo.svg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {faLinkedin} from '@fortawesome/free-brands-svg-icons';
 import { faGithub } from '@fortawesome/free-brands-svg-icons';
+import { faInstagram } from '@fortawesome/free-brands-svg-icons';
+import '../App.css';
+
 
 function BarNavigation() {
   return (
     <>
       <Navbar className='navBar-perso fixed-top' expand="lg">
         <Container>
-          <Navbar.Brand href="www.instagram.com/zitraaf/#" className="text-light">
+          <Navbar.Brand href="#" className="text-light">
             <img
               src={monLogo}
               width="40"
@@ -28,6 +31,9 @@ function BarNavigation() {
               </a>
               <a href="https://github.com/IvanKenfack/" target="_blank" rel="noopener noreferrer">
                <FontAwesomeIcon icon={faGithub} color="#0b77e4"/>
+              </a>
+              <a href="www.instagram.com/zitraaf/#" target="_blank" rel="noopener noreferrer">
+               <FontAwesomeIcon icon={faInstagram} color="#0b77e4"/>
               </a>
             </p>
 
