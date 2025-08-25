@@ -44,6 +44,58 @@ function Options(){
     )
 }
 
+function Timer(){
+    return(
+        <>
+            <div className="alert alert-primary" role="alert">   
+                Temps restant: 10 secondes
+            </div>
+        </>           
+    )
+}
+
+
+function GestionQuestion(){
+    return(
+        <>
+        <div className='container mt-5 p-5 rounded' data-bs-theme="light" style={{backgroundColor: '#f1f1ff'}}>
+                <h1 className='text-center mt-3'>Question {}</h1>
+                <div className="container mt-2 p-2 rounded" style = {{diplay:'block'}}>
+                    <img 
+                    className='img-fluid' 
+                    alt ="Image de l'animal" 
+                    src="../RESSOURCES/images/Balaenoptera-acutorostrata.png" />
+                </div>
+                <div className='container mt-2 p-2 rounded' style = {{diplay:'block'}}>
+                    <audio controls className="data-bs-theme=dark">
+                        <source src="../RESSOURCES/audio/2.wav"
+                        type="audio/wav" />
+                        Your browser does not support the audio element.
+                    </audio>
+                </div>
+                <div className='container mt-2 p-1 rounded' style = {{diplay:'block'}}>
+                    <Button variant ="info">
+                        <FontAwesomeIcon icon={faEye} className="me-2" />
+                        Triche un peu
+                    </Button>
+                </div>
+                <div className='container mt-2 p-2 rounded'>
+                    <h2>Choisit la bonne réponse:</h2>
+                    <Options />
+                </div>
+
+                <div className='container mt-1 p-2 rounded'>
+                    <Button variant="dark">
+                        <FontAwesomeIcon icon={faCheck} className="me-2" />
+                        Soumettre
+                    </Button>
+                </div>
+            </div>
+        </>      
+
+    )
+}
+
 
 /*
 function Feedback(){
@@ -76,39 +128,8 @@ function Quiz(){
     return(
         <>
             <BarNavigation />
-            <div className='container mt-5 p-5 rounded' data-bs-theme="light" style={{backgroundColor: '#f1f1ff'}}>
-                <h1 className='text-center mt-3'>Question {}</h1>
-                <div className='container mt-2 p-5 rounded' style = {{diplay:'block'}}>
-                    <img 
-                    className='img-fluid' 
-                    alt ="Image de l'animal" 
-                    src="../RESSOURCES/images/Balaena-mysticetus.png" />
-                </div>
-                <div className='container mt-2 p-2 rounded' style = {{diplay:'block'}}>
-                    <audio controls className="data-bs-theme=dark">
-                        <source src="../RESSOURCES/audio/1.wav"
-                        type="audio/wav" />
-                        Your browser does not support the audio element.
-                    </audio>
-                </div>
-                <div className='container mt-2 p-5 rounded' style = {{diplay:'block'}}>
-                    <Button variant ="info">
-                        <FontAwesomeIcon icon={faEye} className="me-2" />
-                        Triche un peu
-                    </Button>
-                </div>
-                <div className='container mt-2 p-2 rounded'>
-                    <h2>Choisit la bonne réponse:</h2>
-                    <Options />
-                </div>
-
-                <div className='container mt-1` p-2 rounded'>
-                    <Button variant="dark">
-                        <FontAwesomeIcon icon={faCheck} className="me-2" />
-                        Soumettre
-                    </Button>
-                </div>
-            </div>
+            <GestionQuestion />
+            {/* <Feedback /> */}  
         </>
 
     )

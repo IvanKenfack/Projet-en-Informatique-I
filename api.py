@@ -49,31 +49,29 @@ class MediaResource(Resource):
         return jsonify([dict(media) for media in medias])
     
 class PartieResource(Resource):
-    def get(self,IdPartie):
-        """Récupère une partie spécifique par son ID"""
+    def get(self):
+        """Récupère toutes les parties"""
         connexionBD = etablirConnexionBD()
         cursor = connexionBD.cursor()
-        cursor.execute('SELECT IdPartie, nomJoueur, score FROM partie WHERE IdPartie = ?', (IdPartie,))
-        partie = cursor.fetchone()
+        cursor.execute('SELECT IdPartie, nomJoueur, score, nomUtilisateur FROM partie ORDER BY score DESC')
+        parties = cursor.fetchall()
         connexionBD.close()
-        
-        if partie:
-            return jsonify(dict(partie))
-        return {'message': 'Partie non trouvée'}, 404
+        return jsonify([dict(partie) for partie in parties])
+
     
     def post(self):
         """Stocke les infos d'une partie terminée"""
         donnees = request.get_json()
 
-        if not donnees or 'nomJoueur' not in donnees or 'score' not in donnees:
+        if not donnees or 'nomJoueur' not in donnees or 'score' not in donnees or 'nomUtilisateur' not in donnees:
             return {'message': 'Données invalides'}, 400
         
         connexionBD = etablirConnexionBD()
         cursor = connexionBD.cursor()
 
         try:
-            cursor.execute('INSERT INTO partie (nomJoueur, score) VALUES (?, ?)', 
-                           (donnees['nomJoueur'], donnees['score']))
+            cursor.execute('INSERT INTO partie (nomJoueur, score, nomUtilisateur) VALUES (?, ?, ?)', 
+                           (donnees['nomJoueur'], donnees['score'], donnees['nomUtilisateur']))
             connexionBD.commit()
             nouvel_Id = cursor.lastrowid
 
@@ -81,6 +79,7 @@ class PartieResource(Resource):
             return {'message': 'Partie enregistrée avec succès',
                     'IdPartie': nouvel_Id,
                     'nomJoueur': donnees['nomJoueur'],
+                    'nomUtilisateur': donnees['nomUtilisateur'],
                     'score': donnees['score']
                     }, 201
         except sqlite3.Error as e:
@@ -99,7 +98,7 @@ class PartieResource(Resource):
 api.add_resource(BaleinesResource, '/api/baleines')
 api.add_resource(BaleineResource, '/api/baleines/<int:IdBaleine>')
 api.add_resource(MediaResource, '/api/baleines/<int:IdBaleine>/media')
-api.add_resource(PartieResource, '/api/parties', '/api/parties/<int:IdPartie>')
+api.add_resource(PartieResource, '/api/parties')
 
 if __name__ == '__main__':
     app.run(debug=True)
