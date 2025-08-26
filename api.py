@@ -14,16 +14,31 @@ def etablirConnexionBD():
 
 class BaleineResource(Resource):
     def get(self, IdBaleine):
-        """Récupère une baleine spécifique par son ID"""
+        """Récupère une baleine spécifique par son ID, ainsi que ses médias associés"""
         connexionBD = etablirConnexionBD()
         cursor = connexionBD.cursor()
+
+        #Je recupere les infos de la baleine
         cursor.execute('SELECT IdBaleine, nomCommun, nomScientifique FROM baleines WHERE IdBaleine = ?', (IdBaleine,))
         baleine = cursor.fetchone()
-        connexionBD.close()
+
+        #Si la baleine n'existe pas, on ferme la connexion
+        if baleine is None:
+            return {'message': 'Baleine non trouvée'}, 404
+            connexionBD.close()
         
-        if baleine:
-            return jsonify(dict(baleine))
-        return {'message': 'Baleine non trouvée'}, 404
+        #Ensuite, on recupere les medias associes a la baleine
+        medias = connexionBD.execute('SELECT IdMedia, typeMedia, cheminFichier FROM media WHERE IdBaleine = ?', (IdBaleine,)).fetchall()
+        connexionBD.close()
+
+        #On convertit les résultats en dictionnaires pour une meilleure lisibilité 
+        return jsonify({
+            'IdBaleine': baleine['IdBaleine'],
+            'nomCommun': baleine['nomCommun'],
+            'nomScientifique': baleine['nomScientifique'],
+            'medias': [dict(media) for media in medias]
+        })
+        
     
 
 class BaleinesResource(Resource):
@@ -35,18 +50,6 @@ class BaleinesResource(Resource):
         baleines = cursor.fetchall()
         conn.close()
         return jsonify([dict(baleine) for baleine in baleines])
-
-
-    
-class MediaResource(Resource):
-    def get(self, IdBaleine):
-        """Récupère tous les médias d'une baleine spécifique"""
-        connexionBD = etablirConnexionBD()
-        cursor = connexionBD.cursor()
-        cursor.execute('SELECT IdMedia, typeMedia, cheminFichier, IdBaleine FROM media WHERE IdBaleine = ?', (IdBaleine,))
-        medias = cursor.fetchall()
-        connexionBD.close()
-        return jsonify([dict(media) for media in medias])
     
 class PartieResource(Resource):
     def get(self):
@@ -97,7 +100,6 @@ class PartieResource(Resource):
 # Configuration des routes
 api.add_resource(BaleinesResource, '/api/baleines')
 api.add_resource(BaleineResource, '/api/baleines/<int:IdBaleine>')
-api.add_resource(MediaResource, '/api/baleines/<int:IdBaleine>/media')
 api.add_resource(PartieResource, '/api/parties')
 
 if __name__ == '__main__':
