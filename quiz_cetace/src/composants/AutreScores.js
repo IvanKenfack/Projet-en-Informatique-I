@@ -1,4 +1,7 @@
-import Carousel from 'react-bootstrap/Carousel'; 
+import Carousel from 'react-bootstrap/Carousel';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import holderjs from 'holderjs';
+
 
 function Carousel_() {
   return (

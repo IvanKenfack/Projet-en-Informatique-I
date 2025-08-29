@@ -1,3 +1,6 @@
+import { useState } from 'react';
+
+//Importation des composants Bootstrap
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
@@ -14,17 +17,26 @@ import {useNavigate} from 'react-router-dom';
 function Formulaire(){
 
     const navigate = useNavigate();
+    const [nomJoueur, setNomJoueur] = useState('');
+    const [nomUtilisateur, setNomUtilisateur] = useState('');
+    const [status, setStatus] = useState('saisit'); // Pour gérer les messages d'erreur ou de succès
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        setStatus('soummet');
+
         // Logique pour traiter le formulaire
+        let nom = document.getElementById('inlineFormInput').value;
+        let userName = document.getElementById('inlineFormInputGroup').value;
+        //console.log(`Nom: ${nom}, Nom d'utilisateur: ${userName}`);
+
 
         navigate('./Quiz');
     };
 
     return(
         <>
-             <div className='container p-5 rounded' data-bs-theme="light"style={{backgroundColor: '#f1f1f7'}}>
+             <div className='container p-3 rounded' data-bs-theme="light"style={{backgroundColor: '#f1f1f7'}}>
                 <Form>
                     <Col xs="auto">
                     <Form.Label htmlFor="inlineFormInput">
@@ -33,8 +45,7 @@ function Formulaire(){
                     </Form.Label>
                     <Form.Control
                         className="mb-2"
-                        id="inlineFormInput"
-                        
+                        id="inlineFormInput"   
                     />
                     </Col>
                     <Col xs="auto">

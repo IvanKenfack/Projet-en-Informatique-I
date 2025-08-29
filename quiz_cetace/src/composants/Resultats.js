@@ -35,3 +35,5 @@ function Resultats(){
  
     )
 }
+
+export default Resultats;

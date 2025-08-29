@@ -3,6 +3,7 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Acceuil from "./composants/Acceuil";
 import Quiz from "./composants/Quiz";
+import Resultats from "./composants/Resultats";
 import {
     BrowserRouter,
     Routes,
@@ -16,18 +17,22 @@ function App() {
 
   return (
     <>
-    <BrowserRouter>
-                <Routes>
-                    <Route
-                        path="/"
-                        element={<Acceuil />}
-                    />
-                    <Route
-                        path="/Quiz"
-                        element={<Quiz />}
-                    />
-                </Routes>
-    </BrowserRouter>
+      <BrowserRouter>
+                  <Routes>
+                      <Route
+                          path="/"
+                          element={<Acceuil />}
+                      />
+                      <Route
+                          path="/Quiz"
+                          element={<Quiz />}
+                      />
+                      <Route
+                          path="/Resultats"
+                          element={<Resultats />}
+                      />
+                  </Routes>
+      </BrowserRouter>
     </>
   );
 }
