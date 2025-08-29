@@ -6,6 +6,8 @@ import holderjs from 'holderjs';
 function Carousel_() {
   return (
     <>
+        // Courtoisie de https://react-bootstrap.netlify.app/docs/forms/input-group/
+        
         <div className='container mt-3 p-5 rounded'data-bs-theme="light" style={{backgroundColor: '#f1f1f7'}}>
             <Carousel data-bs-theme="dark">
                 <Carousel.Item>

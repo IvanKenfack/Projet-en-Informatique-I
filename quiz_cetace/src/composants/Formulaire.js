@@ -37,6 +37,7 @@ function Formulaire(){
     };
 
     //Lorsque l'utilisateur modifie les champs du formulaire, le bouton commencer le quiz est desactivé
+    
     function handleNomJoueurChange(e){
         setNomJoueur(e.target.value);
         setStatus('saisit');
