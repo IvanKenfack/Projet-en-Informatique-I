@@ -32,7 +32,7 @@ function BarNavigation() {
               <a href="https://github.com/IvanKenfack/" target="_blank" rel="noopener noreferrer">
                <FontAwesomeIcon icon={faGithub} color="#0b77e4"/>
               </a>
-              <a href="www.instagram.com/zitraaf/#" target="_blank" rel="noopener noreferrer">
+              <a href="https://www.instagram.com/zitraaf/#" target="_blank" rel="noopener noreferrer">
                <FontAwesomeIcon icon={faInstagram} color="#0b77e4"/>
               </a>
             </p>

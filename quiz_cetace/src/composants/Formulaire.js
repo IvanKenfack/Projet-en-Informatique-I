@@ -19,7 +19,7 @@ function Formulaire(){
     const navigate = useNavigate();
     const [nomJoueur, setNomJoueur] = useState('');
     const [nomUtilisateur, setNomUtilisateur] = useState('');
-    const [status, setStatus] = useState('saisit'); // Pour gérer les messages d'erreur ou de succès
+    const [status, setStatus] = useState('saisit');
 
     // Gestion de la soumission du formulaire
     const handleSoummet = (e) => {
@@ -28,16 +28,16 @@ function Formulaire(){
         // Au clique du bouton commencer le quiz, le formulaire est soumis et le bouton est désactivé
         setStatus('soummet');
 
-        // Stockage des informations du joueur dans le localStorage
+        // Stockage des informations du joueur dans le localStorage pour les réutiliser à la fin du­­­ quiz
         localStorage.setItem('nomJoueur', nomJoueur);
         localStorage.setItem('nomUtilisateur', nomUtilisateur);
 
-        // Et enfin redirection vers la page du quiz
+        // Et enfin, redirection vers la page du quiz
         navigate('./Quiz');
     };
 
     //Lorsque l'utilisateur modifie les champs du formulaire, le bouton commencer le quiz est desactivé
-    
+
     function handleNomJoueurChange(e){
         setNomJoueur(e.target.value);
         setStatus('saisit');

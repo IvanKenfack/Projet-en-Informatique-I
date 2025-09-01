@@ -1,9 +1,12 @@
 from flask import Flask, jsonify, request
 from flask_restful import Api, Resource
 import sqlite3
+from flask_cors import CORS
 
 app = Flask(__name__)
 api = Api(app)
+
+CORS(app,origins=["http://localhost:3000"])  
 
 BASE_DE_DONNÉE = 'BD_Baleines.db'
 
