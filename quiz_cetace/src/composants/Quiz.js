@@ -2,9 +2,11 @@ import BarNavigation from "./Navbar"
 import Button from 'react-bootstrap/Button';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye } from '@fortawesome/free-solid-svg-icons';
-import {faEyeSlash} from '@fortawesome/free-solid-svg-icons';
 import {faCheck} from '@fortawesome/free-solid-svg-icons';
 import Form from 'react-bootstrap/Form';
+import {selectionneurQuestion} from "../services/Services";
+import { useState, useEffect, use } from "react";
+
 
 
 function Options(){
@@ -45,21 +47,71 @@ function Options(){
 }
 
 function Timer(){
-    return(
-        <>
-            <div className="alert alert-primary" role="alert">   
-                Temps restant: 10 secondes
-            </div>
-        </>           
-    )
-}
+    const [decompte, setDecompte] = useState(20);
+    useEffect(() => {
+        setTimeout(() => {
+            setDecompte(decompte - 1);
+        }, 1000);
+
+})
+    if (decompte >= 10) {
+        return(
+            <>
+                <div className="alert alert-primary text-center" role="alert">   
+                    Temps restant: {decompte} secondes
+                </div>
+            </>           
+        )
+    }
+        return(
+            <>
+                <div className="alert alert-danger text-center" role="alert">   
+                    Temps restant: {decompte} secondes
+                </div>
+            </>           
+        )
+    }
+    
 
 
 function GestionQuestion(){
+
+    const idQuestions = selectionneurQuestion(10);
+    const [status,setStatus] = useState('joue')
+    const [indexQuestionCourante, setIndexQuestionCourante] = useState();
+    const [tabBaleines, setTabBaleines] = useState([]);
+    
+
+
+    console.log(idQuestions);
+   //const []
+
+   useEffect(() => {
+    // Logique pour charger les questions en utilisant les idQuestions
+    
+    }, [idQuestions]);
+
+
     return(
         <>
-        <div className='container mt-5 p-5 rounded' data-bs-theme="light" style={{backgroundColor: '#f1f1ff'}}>
-                <h1 className='text-center mt-3'>Question {}</h1>
+        <div className='container mt-5 p-3 rounded' data-bs-theme="light" >
+            <div className="row">
+            <h1 className='text-center mt-5'>
+                Bonne chance 
+                <span
+
+                    style={{fontWeight: "bold", marginLeft: "10px"}}>
+                        {localStorage.getItem('nomJoueur')}
+                </span>
+            </h1>
+            
+            <div className="col mt-4">
+                <Timer />
+            </div>
+            </div>
+        </div>
+        <div className='container mt-3 p-5 rounded' data-bs-theme="light" style={{backgroundColor: '#f1f1ff'}}>
+                <h2 className='text-center mt-3'>Question {}</h2>
                 <div className="container mt-2 p-2 rounded" style = {{diplay:'block'}}>
                     <img 
                     className='img-fluid' 

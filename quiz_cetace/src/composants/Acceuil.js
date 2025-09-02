@@ -21,7 +21,7 @@ function Acceuil() {
             </p>
 
             <p className='text-center mt-3'>
-                Vous aurez 10 secondes pour répondre à chaque question. Bonne chance!
+                Vous aurez 20 secondes pour répondre à chaque question. Bonne chance!
             </p>
         </div>
         <div className='container mt-3 p-5 rounded' data-bs-theme="light" style={{backgroundColor: '#f1f1fa'}}>
