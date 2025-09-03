@@ -66,7 +66,8 @@ function GestionQuestion(){
         const [reponseQuestionCourante, setReponseQuestionCourante] = useState(null);
         const [score, setScore] = useState(0);
         const [questionCourante, setQuestionCourante] = useState({});
-        const [resultatParQuestion, setResultatParQuestion] = useState([{}]);
+        const [resultatsNomCommun, setResultatsNomCommun] = useState([]);
+        const [resultatsNomScientifique, setResultatsNomScientifique] = useState([]);
         const [optionsNomCommun, setOptionsNomCommun] = useState([]);
         const [optionsNomScientifique, setOptionsNomScientifique] = useState([]);
         const [tricheUnpeu, setTricheUnpeu] = useState(false);
@@ -87,7 +88,6 @@ function GestionQuestion(){
                     // On récupère la question courante
                     const reponseBaleine = await axios.get(`http://localhost:5000/api/baleines/${idQuestions[indexQuestionCourante - 1]}`);
                     setReponseQuestionCourante(reponseBaleine.data);
-                    localStorage.setItem('questionCourante', reponseBaleine.data);
 
                     // On récupère toutes les baleines pour les options
                     const tabBaleines = await axios.get('http://localhost:5000/api/baleines');
@@ -151,6 +151,32 @@ function GestionQuestion(){
                 </div>
             </>
             );
+        }
+
+        const handleSoummission = (e) => {
+            e.preventDefault();
+            // Logique pour gérer la soumission de la réponse
+            let reponseNomCommun = document.querySelector('input[name="options1"]:checked');
+            let reponseNomScientifique = document.querySelector('input[name="options2"]:checked');
+
+            if (reponseNomCommun === reponseQuestionCourante.nomCommun){
+                setScore(score + 0.5);
+                setResultatsNomCommun([...resultatsNomCommun, 0.5]);
+            }
+            else setResultatsNomCommun([...resultatsNomCommun, 0]);
+            
+            if (reponseNomScientifique === reponseQuestionCourante.nomScientifique){
+                setScore(score + 0.5);
+                setResultatsNomScientifique([...resultatsNomScientifique, 0.5]);
+            }
+            else setResultatsNomScientifique([...resultatsNomScientifique, 0]);
+                
+
+            // Vérifier les réponses sélectionnées et mettre à jour le score
+            // Passer à la question suivante ou terminer le quiz si c'est la dernière question
+
+            
+
         }
 
         return(
@@ -227,6 +253,8 @@ function GestionQuestion(){
                     <div className='container mt-1 p-2 rounded'>
                         <Button 
                         variant="dark"
+                        type="submit"
+                        //onClick={}
                         >
                             <FontAwesomeIcon icon={faCheck} className="me-2" />
                             Soumettre
