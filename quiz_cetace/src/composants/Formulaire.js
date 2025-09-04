@@ -33,7 +33,7 @@ function Formulaire(){
         localStorage.setItem('nomUtilisateur', nomUtilisateur);
 
         // Et enfin, redirection vers la page du quiz
-        navigate('./Quiz');
+        navigate('./Quiz')
     };
 
     //Lorsque l'utilisateur modifie les champs du formulaire, le bouton commencer le quiz est desactivé
