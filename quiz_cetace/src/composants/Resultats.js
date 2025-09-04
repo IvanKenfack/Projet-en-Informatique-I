@@ -41,9 +41,10 @@ function Resultats(){
                     <h3>Score: X/10</h3>
                     <p>Vous avez répondu correctement à X questions sur 10.</p>
                     <Button 
-                    className="mb-1 mt-3">
+                        className="mb-1 mt-3">
                         <FontAwesomeIcon icon={faPlay} className="me-2" />
-                        Rejouer</Button>
+                        Rejouer
+                    </Button>
                 </div>
                 <div className="col text-center">
                     <h2>Votre classement</h2>
