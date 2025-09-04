@@ -270,7 +270,7 @@ function GestionQuestion({
                     </div>
                     <div className='container mt-2 p-1 rounded' style = {{diplay:'block'}}>
                         <Button variant ="info" onClick={(e) => handleTriche(e)} disabled={utilisationIndice >= 2}>
-                            <FontAwesomeIcon icon={faEye} className="me-2" beat/>
+                            <FontAwesomeIcon icon={faEye} className="me-2"/>
                             Triche un peu
                         </Button>
                     </div>
@@ -299,7 +299,7 @@ function GestionQuestion({
                             type="submit"
                             onClick={handleSoummission}
                             >
-                                <FontAwesomeIcon icon={faCheck} className="me-2" />
+                                <FontAwesomeIcon icon={faCheck} className="me-2" beat/>
                                 Soumettre
                             </Button>
                         </div>
