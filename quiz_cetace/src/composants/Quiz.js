@@ -11,7 +11,7 @@ import Spinner from 'react-bootstrap/Spinner';
 
 
 
-function Options({options,name}){
+function Options({options,name,handler}){
     return(
         
         <>
@@ -21,11 +21,33 @@ function Options({options,name}){
                 id={`option-${index}`}
                 label={option}
                 name={name}
+                onChange={handler}
+                key={index}
+                value={option}
+                
             />
             ))}
         </>
         )
 }
+
+/*
+    function Formulaire(){
+        return(
+        <>
+            <Form>
+                <Form.Label>Nom Commun:</Form.Label>
+                <Form.Control 
+                type="radio"
+                id={`option-${index}`}>
+                label={option}
+                name={name}
+                </Form.Control>
+            </Form>
+        </Form>
+        )
+    }
+*/ 
 
 function Timer(){
 
@@ -57,21 +79,14 @@ function Timer(){
 }
     
 
-function GestionQuestion(){
+function GestionQuestion({
+   indexQuestionCourante, setIndexQuestionCourante, tabBaleines, setTabBaleines,optionsNomCommun, setOptionsNomCommun,
+   reponseQuestionCourante, setReponseQuestionCourante, score, setScore,optionsNomScientifique, setOptionsNomScientifique,
+   resultatsNomCommun, setResultatsNomCommun, resultatsNomScientifique, setResultatsNomScientifique,
+   tricheUnpeu, setTricheUnpeu, utilisationIndice, setUtilisationIndice, propositionNS, setPropositionNS,
+   propositionNC, setPropositionNC, indicateurSuccess1,setIndicateurSuccess1,indicateurSuccess2,setIndicateurSuccess2,status,setStatus})
+   {
 
-    
-        const [status,setStatus] = useState('chargement');
-        const [indexQuestionCourante, setIndexQuestionCourante] = useState(1);
-        const [tabBaleines, setTabBaleines] = useState([]);
-        const [reponseQuestionCourante, setReponseQuestionCourante] = useState(null);
-        const [score, setScore] = useState(0);
-        const [questionCourante, setQuestionCourante] = useState({});
-        const [resultatsNomCommun, setResultatsNomCommun] = useState([]);
-        const [resultatsNomScientifique, setResultatsNomScientifique] = useState([]);
-        const [optionsNomCommun, setOptionsNomCommun] = useState([]);
-        const [optionsNomScientifique, setOptionsNomScientifique] = useState([]);
-        const [tricheUnpeu, setTricheUnpeu] = useState(false);
-        const [utilisationIndice, setUtilisationIndice] = useState(0);
 
         const handleTriche = (e) => {
             e.preventDefault();
@@ -94,6 +109,7 @@ function GestionQuestion(){
 
                     // On prépare les options pour le nom commun
                     let optionsNomCommun = [reponseBaleine.data.nomCommun];
+                    
 
                     // On mélange le tableau des baleines
                     setTabBaleines(MelangeurTableau(tabBaleines.data));
@@ -121,7 +137,6 @@ function GestionQuestion(){
                         i++;
                     }
                     setOptionsNomScientifique(MelangeurTableau(optionsNomScientifique));
-                    console.log(optionsNomScientifique);
                     
 
                 }
@@ -135,13 +150,16 @@ function GestionQuestion(){
                 }
             }
             question();
+            
 
         },[]);
+
 
         useEffect(() => {
             if(tricheUnpeu === true)
                 setUtilisationIndice(prec => prec + 1);
             },[tricheUnpeu]);
+
 
         if (status === 'chargement' || reponseQuestionCourante === null) {
             return(
@@ -153,23 +171,33 @@ function GestionQuestion(){
             );
         }
 
+        //Trichage perso
+        console.log(reponseQuestionCourante)
+
         const handleSoummission = (e) => {
             e.preventDefault();
             // Logique pour gérer la soumission de la réponse
-            let reponseNomCommun = document.querySelector('input[name="options1"]:checked');
-            let reponseNomScientifique = document.querySelector('input[name="options2"]:checked');
 
-            if (reponseNomCommun === reponseQuestionCourante.nomCommun){
-                setScore(score + 0.5);
+            //Pour mon trichage perso
+            console.log(reponseQuestionCourante)
+            console.log(propositionNC)
+            console.log(propositionNS)
+         
+            if (propositionNC === reponseQuestionCourante.nomCommun){
+                setScore(prev => prev + 0.5);
                 setResultatsNomCommun([...resultatsNomCommun, 0.5]);
+                setIndicateurSuccess1(0.5)
             }
             else setResultatsNomCommun([...resultatsNomCommun, 0]);
             
-            if (reponseNomScientifique === reponseQuestionCourante.nomScientifique){
-                setScore(score + 0.5);
+            if (propositionNS === reponseQuestionCourante.nomScientifique){
+                setScore(prev => prev + 0.5);
                 setResultatsNomScientifique([...resultatsNomScientifique, 0.5]);
+                setIndicateurSuccess2(0.5)
             }
             else setResultatsNomScientifique([...resultatsNomScientifique, 0]);
+
+           setStatus('retroaction') 
                 
 
             // Vérifier les réponses sélectionnées et mettre à jour le score
@@ -177,6 +205,20 @@ function GestionQuestion(){
 
             
 
+        }
+
+        const handleButtonDisabled = () => {
+
+        }
+
+        const handleNSchange = (e) => {
+
+            setPropositionNS(e.target.value);
+        }
+
+        const handleNCchange = (e) => {  
+
+            setPropositionNC(e.target.value);
         }
 
         return(
@@ -198,7 +240,7 @@ function GestionQuestion(){
             </div>
 
             <div className='container mt-3 p-5 rounded' data-bs-theme="light" style={{backgroundColor: '#f1f1ff'}}>
-                    <h2 className='text-center mt-3'>Question {indexQuestionCourante}</h2>
+                    <h2 className='text-center mt-3'>Question {indexQuestionCourante}: Quel baleine produit ce son?</h2>
 
                     <div className="container mt-2 p-2 rounded" style = {{display:tricheUnpeu ? 'block' : 'none'}}>
                         <img 
@@ -234,32 +276,34 @@ function GestionQuestion(){
                     </div>
 
                     <div className="container mt-4 p-1 rounded">
-                        <h2>Choisit la bonne réponse:</h2>
+                        <h3>Choisit la bonne réponse:</h3>
                     </div>
-                    <div className='row mt-2 p-2 rounded'>
-                        <div className='col mt-2 p-2 rounded'>
-                            <h5>Nom Commun:</h5>
-                            <Options options={optionsNomCommun} name="options1" />
+                    <Form onSubmit={handleSoummission}>
+                        <div className='row mt-2 p-2 rounded'>
+                            <div className='col mt-2 p-2 rounded'>
+                                <h6>Nom Commun:</h6>
+                                <Options options={optionsNomCommun} name="options1" handler={handleNCchange}/>
+                            </div>
+                            <div className='col mt-2 p-2 rounded'>
+                                <h6>Nom Scientifique:</h6>
+                                <Options options={optionsNomScientifique} name="options2" handler={handleNSchange}/>
+                            </div>
+                            
+                            <div className='col-4 mt-2 p-2 rounded'>
+                            </div>
                         </div>
-                        <div className='col mt-2 p-2 rounded'>
-                            <h5>Nom Scientifique:</h5>
-                            <Options options={optionsNomScientifique} name="options2"/>
-                        </div>
-                        
-                        <div className='col-4 mt-2 p-2 rounded'>
-                        </div>
-                    </div>
 
-                    <div className='container mt-1 p-2 rounded'>
-                        <Button 
-                        variant="dark"
-                        type="submit"
-                        //onClick={}
-                        >
-                            <FontAwesomeIcon icon={faCheck} className="me-2" />
-                            Soumettre
-                        </Button>
-                    </div>
+                        <div className='container mt-1 p-2 rounded'>
+                            <Button 
+                            variant="dark"
+                            type="submit"
+                            onClick={handleSoummission}
+                            >
+                                <FontAwesomeIcon icon={faCheck} className="me-2" />
+                                Soumettre
+                            </Button>
+                        </div>
+                    </Form>
                 </div>
             </>      
 
@@ -268,9 +312,9 @@ function GestionQuestion(){
 
 
 
-/*
-function Feedback(){
-    if(){
+
+function Feedback({status,indicateurSuccess1,indicateurSuccess2,reponseQuestionCourante}){
+    if(status === "retroaction" && indicateurSuccess1 + indicateurSuccess2 === 1){
         return(
             <>
                 <div className="alert alert-success" role="alert">
@@ -278,29 +322,90 @@ function Feedback(){
                 </div>
             </>
         )
-    } elseif(){
+    } else if(status === "retroaction" && indicateurSuccess1 + indicateurSuccess2 === 0.5){
         return(
             <>
-                <div className="alert alert-danger" role="alert">
-                    Incorrect! La bonne réponse était ...
+                <div className="alert alert-warning" role="alert">
+                    {`Bien éssayé. Les bonnes réponse était:<p>${reponseQuestionCourante.nomCommun} & <br>${reponseQuestionCourante.nomScientifique}</br></p> `}
                 </div>
             </>
         )
+    } else if(status === "retroaction" && indicateurSuccess1 + indicateurSuccess2 === 0){
+        return(
+            <>
+                <div className="alert alert-danger" role="alert">
+                    Vous aurez plus de chances à la prochaine question.
+                </div>
+            </>
+    );
     } else{
-        return null;
-    } 
+        return null
+    }
 }
-*/
+
 
 
 
 function Quiz(){ 
-
+        const [status,setStatus] = useState('chargement');
+        const [indexQuestionCourante, setIndexQuestionCourante] = useState(1);
+        const [tabBaleines, setTabBaleines] = useState([]);
+        const [reponseQuestionCourante, setReponseQuestionCourante] = useState(null);
+        const [score, setScore] = useState(0);
+        const [questionCourante, setQuestionCourante] = useState({});
+        const [resultatsNomCommun, setResultatsNomCommun] = useState([]);
+        const [resultatsNomScientifique, setResultatsNomScientifique] = useState([]);
+        const [optionsNomCommun, setOptionsNomCommun] = useState([]);
+        const [optionsNomScientifique, setOptionsNomScientifique] = useState([]);
+        const [tricheUnpeu, setTricheUnpeu] = useState(false);
+        const [utilisationIndice, setUtilisationIndice] = useState(0);
+        const [propositionNS, setPropositionNS] = useState("");
+        const [propositionNC, setPropositionNC] = useState("");
+        const [indicateurSuccess1,setIndicateurSuccess1] = useState(0)
+        const [indicateurSuccess2,setIndicateurSuccess2] = useState(0)
     return(
         <>
             <BarNavigation />
-            <GestionQuestion />
-            {/* <Feedback /> */}  
+            <GestionQuestion 
+            status={status}
+            setStatus={setStatus}
+            indexQuestionCourante={indexQuestionCourante}
+            setIndexQuestionCourante={setIndexQuestionCourante}
+            tabBaleines={tabBaleines}
+            setTabBaleines={setTabBaleines}
+            reponseQuestionCourante={reponseQuestionCourante}
+            setReponseQuestionCourante={setReponseQuestionCourante}
+            score={score}
+            setScore={setScore}
+            questionCourante={questionCourante}
+            setQuestionCourante={setQuestionCourante}
+            resultatsNomCommun={resultatsNomCommun}
+            setResultatsNomCommun={setResultatsNomCommun}
+            resultatsNomScientifique={resultatsNomScientifique}
+            setResultatsNomScientifique={setResultatsNomScientifique}
+            optionsNomCommun={optionsNomCommun}
+            setOptionsNomCommun={setOptionsNomCommun}
+            optionsNomScientifique={optionsNomScientifique}
+            setOptionsNomScientifique={setOptionsNomScientifique}
+            tricheUnpeu={tricheUnpeu}
+            setTricheUnpeu={setTricheUnpeu}
+            utilisationIndice={utilisationIndice}
+            setUtilisationIndice={setUtilisationIndice}
+            propositionNS={propositionNS}
+            propositionNC={propositionNC}
+            setPropositionNC={setPropositionNC}
+            setPropositionNS={setPropositionNS}
+            indicateurSuccess1={indicateurSuccess1}
+            setIndicateurSuccess1={setIndicateurSuccess1}
+            indicateurSuccess2={indicateurSuccess2}
+            setIndicateurSuccess2={setIndicateurSuccess2}
+
+            />
+            <Feedback 
+            status={status}
+            indicateurSuccess1={indicateurSuccess1}
+            indicateurSuccess2={indicateurSuccess2}
+            reponseQuestionCourante={reponseQuestionCourante}/>  
         </>
 
     )
