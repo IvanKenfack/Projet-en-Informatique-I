@@ -31,25 +31,7 @@ function Options({options,name,handler}){
         )
 }
 
-/*
-    function Formulaire(){
-        return(
-        <>
-            <Form>
-                <Form.Label>Nom Commun:</Form.Label>
-                <Form.Control 
-                type="radio"
-                id={`option-${index}`}>
-                label={option}
-                name={name}
-                </Form.Control>
-            </Form>
-        </Form>
-        )
-    }
-*/ 
-
-function Timer(){
+function Timer({setStatus}){
 
     const [decompte, setDecompte] = useState(20);
     useEffect(() => {
@@ -67,15 +49,17 @@ function Timer(){
                 </div>
             </>           
         )
+    }else if(decompte <= 10 && decompte >=0 ){
+        return(
+            <>
+                <div className="alert alert-danger text-center" role="alert">   
+                    Temps restant: {decompte} secondes
+                </div>
+            </>           
+        )
+    }else{
+        setStatus("terminé")
     }
-    
-    return(
-        <>
-            <div className="alert alert-danger text-center" role="alert">   
-                Temps restant: {decompte} secondes
-            </div>
-        </>           
-    )
 }
     
 
@@ -197,17 +181,16 @@ function GestionQuestion({
             }
             else setResultatsNomScientifique([...resultatsNomScientifique, 0]);
 
-           setStatus('retroaction') 
-                
+           setStatus('retroaction')
+
+           setTimeout(()=>{
+                setIndexQuestionCourante(prev=>prev+1)
+           },5000)
 
             // Vérifier les réponses sélectionnées et mettre à jour le score
             // Passer à la question suivante ou terminer le quiz si c'est la dernière question
 
             
-
-        }
-
-        const handleButtonDisabled = () => {
 
         }
 
@@ -235,12 +218,12 @@ function GestionQuestion({
                     </h1>
                 </div>
                 <div className="col mt-4">
-                    <Timer />
+                    <Timer setStatus={setStatus}/>
                 </div>    
             </div>
 
             <div className='container mt-3 p-5 rounded' data-bs-theme="light" style={{backgroundColor: '#f1f1ff'}}>
-                    <h2 className='text-center mt-3'>Question {indexQuestionCourante}: Quel baleine produit ce son?</h2>
+                    <h2 className='text-center mt-3'>Question {indexQuestionCourante}: Quel Cétacé produit ce son?</h2>
 
                     <div className="container mt-2 p-2 rounded" style = {{display:tricheUnpeu ? 'block' : 'none'}}>
                         <img 
