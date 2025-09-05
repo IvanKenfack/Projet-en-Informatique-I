@@ -154,7 +154,7 @@ function GestionQuestion({
                 
             } catch (error) {
                 if (error.name === 'CanceledError') {
-                    console.log('Request canceled');
+                    console.log('Requette annulé');
                 } else {
                     console.error("Erreur lors de la récupération des questions:", error);
                 }
@@ -168,7 +168,11 @@ function GestionQuestion({
 
         // Passer à la question suivante ou terminer le quiz si c'est la dernière question
         if(indexQuestionCourante>10){
-            
+
+            localStorage.setItem('tapReponsesNC', JSON.stringify(resultatsNomCommun))
+            localStorage.setItem('tapReponsesNS', JSON.stringify(resultatsNomScientifique))
+            localStorage.setItem('score',score)
+
             axios.post('http://localhost:5000/api/parties',
                 {
                     nomJoueur: localStorage.getItem('nomJoueur'),
@@ -176,7 +180,7 @@ function GestionQuestion({
                     score: score
                 })
                 .then((response)=>{
-                    console.log(response)
+                    console.log(response.data)
                 })
                 .finally(() =>{
                     navigate('/Resultats');
