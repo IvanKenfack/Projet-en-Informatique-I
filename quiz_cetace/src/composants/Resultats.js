@@ -48,18 +48,18 @@ function Resultats(){
 
     const handleCliqueRejouer = (e) =>{
 
-        e.preventDefault();
         localStorage.removeItem('tabReponsesNS');
         localStorage.removeItem('tabreponsesNC');
         localStorage.removeItem('score')
+        
         navigate('/Quiz')
 
     }
 
     const handleCliqueAcceuil = (e) =>{
         
-        e.preventDefault();
         localStorage.clear();
+        
         navigate('/')
 
     }
@@ -106,7 +106,7 @@ function Resultats(){
 
                                             {/*Si la note est inferieur à 0.5, donc 0, elle s'affiche en rouge*/}
                                             <td style={{color: noteNS < 0.5 ? '#f2668b':'black'}}>{noteNS}</td>
-                                            <td style={{color: noteNS < 0.5 ? '#f2668b':'black'}}>{resDetNC[i]}</td>
+                                            <td style={{color: resDetNC[i] < 0.5 ? '#f2668b':'black'}}>{resDetNC[i]}</td>
                                         </tr>
 
                                     ))}

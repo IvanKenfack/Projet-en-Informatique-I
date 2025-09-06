@@ -93,6 +93,7 @@ function GestionQuestion({
         }
 
     useEffect(() => {
+
         const chargerQuestion = async () => {
             setLoading(true);
             setStatus('chargement');
@@ -101,8 +102,8 @@ function GestionQuestion({
             setTricheUnpeu(false);
             setPropositionNS("");
             setPropositionNC("");
-            setIndicateurSuccess1(0);
-            setIndicateurSuccess2(0);
+            //setIndicateurSuccess1(0);
+            //setIndicateurSuccess2(0);
             
             try {
                 const idQuestions = selectionneurQuestion(10);
@@ -159,7 +160,7 @@ function GestionQuestion({
                     console.error("Erreur lors de la récupération des questions:", error);
                 }
             } finally {
-                setLoading(false);
+                //setLoading(false);
                 setStatus('prêt');
                 
             }
@@ -167,7 +168,7 @@ function GestionQuestion({
         
         chargerQuestion();
 
-        // Passer à la question suivante ou terminer le quiz si c'est la dernière question
+        // Si le quiz est à la dernière question
         if(indexQuestionCourante>10){
 
             localStorage.setItem('tabReponsesNC', JSON.stringify(resultatsNomCommun))
@@ -211,9 +212,10 @@ function GestionQuestion({
         // Logique pour gérer la soumission de la réponse
         const handleSoummission = (e) => {
             e.preventDefault();
-
-         
+    
             if (propositionNC === reponseQuestionCourante.nomCommun){
+                console.log("PropositionNC :"+propositionNC)
+                console.log("reponseQuestionCourante.nomCommun :"+reponseQuestionCourante.nomCommun)
                 setScore(prev => prev + 0.5);
                 setResultatsNomCommun([...resultatsNomCommun, 0.5]);
                 setIndicateurSuccess1(0.5)
@@ -221,6 +223,8 @@ function GestionQuestion({
             else setResultatsNomCommun([...resultatsNomCommun, 0]);
             
             if (propositionNS === reponseQuestionCourante.nomScientifique){
+                console.log("PropositionNS :"+propositionNC)
+                console.log("reponseQuestionCourante.nomScientifique :"+reponseQuestionCourante.nomScientifique)
                 setScore(prev => prev + 0.5);
                 setResultatsNomScientifique([...resultatsNomScientifique, 0.5]);
                 setIndicateurSuccess2(0.5)
@@ -232,6 +236,9 @@ function GestionQuestion({
            setTimeout(()=>{
                 setIndexQuestionCourante(prev=>prev+1)
                 setStatutQuestion('')
+                setIndicateurSuccess1(0);
+                setIndicateurSuccess2(0);
+                
            },5000)
         }
 
@@ -352,10 +359,10 @@ function Feedback({statutQuestion,indicateurSuccess1,indicateurSuccess2,reponseQ
         )
     } else if(statutQuestion === "repondu" && indicateurSuccess1 + indicateurSuccess2 === 0.5){
         return(
-            <>
+            <>  {`
                 <div className="alert alert-warning" role="alert">
-                    {`Bien éssayé. Les bonnes réponse était:<p>${reponseQuestionCourante.nomCommun} & <br>${reponseQuestionCourante.nomScientifique}</br></p> `}
-                </div>
+                    Bien éssayé. Les bonnes réponse était:<p>${reponseQuestionCourante.nomCommun} & <br>${reponseQuestionCourante.nomScientifique}</br></p> 
+                </div>`}
             </>
         )
     } else if(statutQuestion === "repondu" && indicateurSuccess1 + indicateurSuccess2 === 0){
