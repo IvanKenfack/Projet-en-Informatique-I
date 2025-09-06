@@ -71,7 +71,7 @@ function GestionQuestion({
    reponseQuestionCourante, setReponseQuestionCourante, score, setScore,optionsNomScientifique, setOptionsNomScientifique,
    resultatsNomCommun, setResultatsNomCommun, resultatsNomScientifique, setResultatsNomScientifique,
    tricheUnpeu, setTricheUnpeu, utilisationIndice, setUtilisationIndice, propositionNS, setPropositionNS,
-   propositionNC, setPropositionNC,controller, setController, indicateurSuccess1,setIndicateurSuccess1,indicateurSuccess2,setIndicateurSuccess2,status,setStatus,loading, setLoading}) {
+   propositionNC, setPropositionNC,statutQuestion,setStatutQuestion,controller, setController, indicateurSuccess1,setIndicateurSuccess1,indicateurSuccess2,setIndicateurSuccess2,status,setStatus,loading, setLoading}) {
 
     const navigate = useNavigate();
     
@@ -161,6 +161,7 @@ function GestionQuestion({
             } finally {
                 setLoading(false);
                 setStatus('prêt');
+                
             }
         };
         
@@ -169,8 +170,8 @@ function GestionQuestion({
         // Passer à la question suivante ou terminer le quiz si c'est la dernière question
         if(indexQuestionCourante>10){
 
-            localStorage.setItem('tapReponsesNC', JSON.stringify(resultatsNomCommun))
-            localStorage.setItem('tapReponsesNS', JSON.stringify(resultatsNomScientifique))
+            localStorage.setItem('tabReponsesNC', JSON.stringify(resultatsNomCommun))
+            localStorage.setItem('tabReponsesNS', JSON.stringify(resultatsNomScientifique))
             localStorage.setItem('score',score)
 
             axios.post('http://localhost:5000/api/parties',
@@ -186,7 +187,7 @@ function GestionQuestion({
                     navigate('/Resultats');
                 })
            }
-    }, [indexQuestionCourante,score]);
+    }, [indexQuestionCourante,score,statutQuestion]);
     
         useEffect(() => {
             if(tricheUnpeu === true)
@@ -226,10 +227,11 @@ function GestionQuestion({
             }
             else setResultatsNomScientifique([...resultatsNomScientifique, 0]);
 
-           setStatus('retroaction')
+           setStatutQuestion('repondu')
 
            setTimeout(()=>{
                 setIndexQuestionCourante(prev=>prev+1)
+                setStatutQuestion('')
            },5000)
         }
 
@@ -261,12 +263,6 @@ function GestionQuestion({
                 </div>    
             </div>
 
-            <Feedback 
-            status={status}
-            indicateurSuccess1={indicateurSuccess1}
-            indicateurSuccess2={indicateurSuccess2}
-            reponseQuestionCourante={reponseQuestionCourante}
-            />
 
             <div className='container mt-3 p-5 rounded' data-bs-theme="light" style={{backgroundColor: '#f1f1ff'}}>
                     <h2 className='text-center mt-3'>Question {indexQuestionCourante}: Quel Cétacé produit ce son?</h2>
@@ -285,7 +281,7 @@ function GestionQuestion({
                                     <audio controls className="data-bs-theme=dark" key={index}>
                                         <source src={`../RESSOURCES${element.cheminFichier}`}
                                         type="audio/wav" />
-                                        Your browser does not support the audio element.
+                                        Votre navigateur ne supporte pas l'élement audio
                                     </audio>
                                 ))
                                 
@@ -294,7 +290,7 @@ function GestionQuestion({
                         <audio controls className="data-bs-theme=dark">
                             <source src="../RESSOURCES/audio/2.wav"
                             type="audio/wav" />
-                            Your browser does not support the audio element.
+                            Votre navigateur ne supporte pas l'élement audio
                         </audio>
                     </div>
                     <div className='container mt-2 p-1 rounded' style = {{diplay:'block'}}>
@@ -342,8 +338,11 @@ function GestionQuestion({
 
 
 
-function Feedback({status,indicateurSuccess1,indicateurSuccess2,reponseQuestionCourante}){
-    if(status === "retroaction" && indicateurSuccess1 + indicateurSuccess2 === 1){
+function Feedback({statutQuestion,indicateurSuccess1,indicateurSuccess2,reponseQuestionCourante}){
+    
+    console.log(statutQuestion,indicateurSuccess1,indicateurSuccess2)
+    
+    if(statutQuestion === "repondu" && indicateurSuccess1 + indicateurSuccess2 === 1){
         return(
             <>
                 <div className="alert alert-success" role="alert">
@@ -351,7 +350,7 @@ function Feedback({status,indicateurSuccess1,indicateurSuccess2,reponseQuestionC
                 </div>
             </>
         )
-    } else if(status === "retroaction" && indicateurSuccess1 + indicateurSuccess2 === 0.5){
+    } else if(statutQuestion === "repondu" && indicateurSuccess1 + indicateurSuccess2 === 0.5){
         return(
             <>
                 <div className="alert alert-warning" role="alert">
@@ -359,7 +358,7 @@ function Feedback({status,indicateurSuccess1,indicateurSuccess2,reponseQuestionC
                 </div>
             </>
         )
-    } else if(status === "retroaction" && indicateurSuccess1 + indicateurSuccess2 === 0){
+    } else if(statutQuestion === "repondu" && indicateurSuccess1 + indicateurSuccess2 === 0){
         return(
             <>
                 <div className="alert alert-danger" role="alert">
@@ -394,6 +393,7 @@ function Quiz(){
         const [indicateurSuccess2,setIndicateurSuccess2] = useState(0)
         const [loading, setLoading] = useState(false);
         const [controller, setController] = useState(new AbortController());
+        const[statutQuestion,setStatutQuestion] = useState('');
     return(
         <>
             <BarNavigation />
@@ -434,7 +434,16 @@ function Quiz(){
             setIndicateurSuccess1={setIndicateurSuccess1}
             indicateurSuccess2={indicateurSuccess2}
             setIndicateurSuccess2={setIndicateurSuccess2}
+            statutQuestion={statutQuestion}
+            setStatutQuestion={setStatutQuestion}
 
+            />
+
+            <Feedback 
+            statutQuestion={statutQuestion}
+            indicateurSuccess1={indicateurSuccess1}
+            indicateurSuccess2={indicateurSuccess2}
+            reponseQuestionCourante={reponseQuestionCourante}
             />
   
         </>
