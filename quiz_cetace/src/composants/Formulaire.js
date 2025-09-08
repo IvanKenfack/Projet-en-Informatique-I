@@ -77,23 +77,26 @@ function Formulaire(){
                         onChange={handleNomUtilisateurChange}/>
                     </InputGroup>
                     </Col>
-                    <Col xs="auto">
-                    </Col>
-                    <Col xs="auto" className="d-flex justify-content-center">
-                    <Button 
-                    type="submit" 
-                    className="mb-1 mt-3" 
-                    onClick={handleSoummet}
 
-                    // Le bouton est désactivé si le formulaire a déjà été soumis ou si au moins un des deux champs est vide
-                    disabled={status === 'soummet' || 
-                            nomJoueur.length === 0 && nomUtilisateur.length === 0 ||
-                            nomJoueur.length === 0 && nomUtilisateur.length > 0 ||
-                            nomJoueur.length > 0 && nomUtilisateur.length === 0 
-                            }>
-                        <FontAwesomeIcon icon={faPlay} className="me-2" />
-                        Commencer le quiz
-                    </Button>
+                    <Col xs="auto" 
+                    className="d-flex justify-content-center">
+
+                            <Button 
+                            type="submit" 
+                            className="mb-1 mt-3" 
+                            onClick={handleSoummet}
+
+                            // Le bouton est désactivé si le formulaire a déjà été soumis ou si au moins un des deux champs est vide
+                            disabled={status === 'soummet' || 
+                                    nomJoueur.length === 0 && nomUtilisateur.length === 0 ||
+                                    nomJoueur.length === 0 && nomUtilisateur.length > 0 ||
+                                    nomJoueur.length > 0 && nomUtilisateur.length === 0 
+                                    }>
+
+                                    <FontAwesomeIcon icon={faPlay} className="me-2" />
+                                    Commencer le quiz
+
+                            </Button>
                     </Col>      
                 </Form>         
             </div>
