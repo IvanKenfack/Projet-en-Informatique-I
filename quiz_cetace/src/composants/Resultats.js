@@ -29,7 +29,7 @@ function Resultats(){
         setScore(scoreEnregistree ? Number(scoreEnregistree) : 0)
 
        
-    },[resDetNC,resDetNS]);
+    },[]);
 
     useEffect(() => {
 

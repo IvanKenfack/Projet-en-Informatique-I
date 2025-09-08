@@ -39,9 +39,6 @@ function Carousel_() {
         </>
         )
     }
-
-    console.log(scores)
-    console.log(scores[0])
   return (
     
     <>

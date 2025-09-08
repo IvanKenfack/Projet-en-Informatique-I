@@ -32,15 +32,57 @@ function Options({options,name,handler}){
         )
 }
 
-function Timer({setStatus}){
+function Timer({statut,setStatus,indexQuestionCourante, propositionNC,propositionNS,reponseQuestionCourante,
+    setScore,setResultatsNomCommun,resultatsNomCommun, setIndicateurSuccess1,setIndicateurSuccess2, 
+    setResultatsNomScientifique,resultatsNomScientifique,setStatutQuestion,setIndexQuestionCourante}){
 
     const [decompte, setDecompte] = useState(20);
-    useEffect(() => {
-        setTimeout(() => {
-            setDecompte(decompte - 1);
-        }, 1000);     // Décrémente le compteur toutes les secondes (1000 ms)
 
-    },[]);   // Le tableau vide [] signifie que cet effet ne s'exécute qu'une fois, au montage du composant   
+    useEffect(() => {
+        //Reinitialise le decompte à chaque question
+        setDecompte(20);
+    },[indexQuestionCourante]);
+
+    //Si le compte à rébours est terminé on stop la question, on l'évalue et on passe à la suivante
+    useEffect(() => {
+
+        if(decompte === 0){
+
+            if (propositionNC === reponseQuestionCourante.nomCommun){
+                
+                setScore(prev => prev + 0.5);
+                setResultatsNomCommun([...resultatsNomCommun, 0.5]);
+                setIndicateurSuccess1(0.5)
+            }
+            else setResultatsNomCommun([...resultatsNomCommun, 0]);
+            
+            if (propositionNS === reponseQuestionCourante.nomScientifique){
+            
+                setScore(prev => prev + 0.5);
+                setResultatsNomScientifique([...resultatsNomScientifique, 0.5]);
+                setIndicateurSuccess2(0.5)
+            }
+            else setResultatsNomScientifique([...resultatsNomScientifique, 0]);
+
+            setStatutQuestion('repondu')
+            setIndexQuestionCourante(prev=>prev+1)
+
+            setTimeout(()=>{
+
+                setStatutQuestion('')
+              
+           },3000)
+
+            return
+        }
+
+        const timer = setInterval(() => {
+            setDecompte((prev) => prev - 1);
+        },1000)
+
+        //Nettoyage
+        return () => clearInterval(timer)
+    }, [decompte])
 
     if (decompte >= 10) {
         return(
@@ -77,7 +119,7 @@ function GestionQuestion({
     
 
     useEffect(() => {
-        // Cancel any pending requests when the component unmounts or when question changes
+        // Annule toutes requettes restantes après chaque question
         return () => {
             controller.abort();
         };
@@ -102,8 +144,6 @@ function GestionQuestion({
             setTricheUnpeu(false);
             setPropositionNS("");
             setPropositionNC("");
-            //setIndicateurSuccess1(0);
-            //setIndicateurSuccess2(0);
             
             try {
                 const idQuestions = selectionneurQuestion(10);
@@ -166,7 +206,10 @@ function GestionQuestion({
             }
         };
         
-        chargerQuestion();
+        if(indexQuestionCourante <= 10){
+            chargerQuestion();
+        }
+        
 
         // Si le quiz est à la dernière question
         if(indexQuestionCourante>10){
@@ -188,7 +231,7 @@ function GestionQuestion({
                     navigate('/Resultats');
                 })
            }
-    }, [indexQuestionCourante,score,statutQuestion]);
+    }, [indexQuestionCourante,score]);
     
         useEffect(() => {
             if(tricheUnpeu === true)
@@ -209,13 +252,13 @@ function GestionQuestion({
         //Pour mon trichage perso
         console.log(reponseQuestionCourante)
 
+
         // Logique pour gérer la soumission de la réponse
         const handleSoummission = (e) => {
             e.preventDefault();
     
             if (propositionNC === reponseQuestionCourante.nomCommun){
-                console.log("PropositionNC :"+propositionNC)
-                console.log("reponseQuestionCourante.nomCommun :"+reponseQuestionCourante.nomCommun)
+                
                 setScore(prev => prev + 0.5);
                 setResultatsNomCommun([...resultatsNomCommun, 0.5]);
                 setIndicateurSuccess1(0.5)
@@ -223,8 +266,7 @@ function GestionQuestion({
             else setResultatsNomCommun([...resultatsNomCommun, 0]);
             
             if (propositionNS === reponseQuestionCourante.nomScientifique){
-                console.log("PropositionNS :"+propositionNC)
-                console.log("reponseQuestionCourante.nomScientifique :"+reponseQuestionCourante.nomScientifique)
+            
                 setScore(prev => prev + 0.5);
                 setResultatsNomScientifique([...resultatsNomScientifique, 0.5]);
                 setIndicateurSuccess2(0.5)
@@ -233,12 +275,13 @@ function GestionQuestion({
 
            setStatutQuestion('repondu')
 
+            //On attends 5 secondes apres la retroaction, le temps de voir ladite retroaction  
            setTimeout(()=>{
                 setIndexQuestionCourante(prev=>prev+1)
                 setStatutQuestion('')
                 setIndicateurSuccess1(0);
                 setIndicateurSuccess2(0);
-                
+              
            },5000)
         }
 
@@ -253,91 +296,107 @@ function GestionQuestion({
         }
 
         return(
-            <>
-        <div className='container mt-5 p-3 rounded' data-bs-theme="light" >
-                <div className="col">
-                    <h1 className='text-center mt-5'>
-                        Bonne chance 
-                        <span
+                <>
+                    <div className='container mt-5 p-3 rounded' data-bs-theme="light" >
+                            <div className="col">
+                                <h1 className='text-center mt-5'>
+                                    Bonne chance 
+                                    <span
 
-                            style={{fontWeight: "bold", marginLeft: "10px"}}>
-                                {localStorage.getItem('nomJoueur')}
-                        </span>
-                    </h1>
-                </div>
-                <div className="col mt-4">
-                    <Timer setStatus={setStatus}/>
-                </div>    
-            </div>
+                                        style={{fontWeight: "bold", marginLeft: "10px"}}>
+                                            {localStorage.getItem('nomJoueur')}
+                                    </span>
+                                </h1>
+                            </div>
+                            <div className="col mt-4">
+                                <Timer
+                                statut={status} 
+                                setStatus={setStatus}
+                                indexQuestionCourante={indexQuestionCourante}
+                                setIndexQuestionCourante={setIndexQuestionCourante}
+                                propositionNC={propositionNC}
+                                propositionNS={propositionNS}
+                                reponseQuestionCourante={reponseQuestionCourante}
+                                setScore={setScore}
+                                setResultatsNomCommun={setResultatsNomCommun}
+                                resultatsNomCommun={resultatsNomCommun}
+                                setIndicateurSuccess1={setIndicateurSuccess1}
+                                setIndicateurSuccess2={setIndicateurSuccess2}
+                                resultatsNomScientifique={resultatsNomScientifique}
+                                setResultatsNomScientifique={setResultatsNomScientifique}
+                                setStatutQuestion={setStatutQuestion}
+                                />
+                            </div>    
+                        </div>
 
 
-            <div className='container mt-3 p-5 rounded' data-bs-theme="light" style={{backgroundColor: '#f1f1ff'}}>
-                    <h2 className='text-center mt-3'>Question {indexQuestionCourante}: Quel Cétacé produit ce son?</h2>
+                        <div className='container mt-3 p-5 rounded' data-bs-theme="light" style={{backgroundColor: '#f1f1ff'}}>
+                                <h2 className='text-center mt-3'>Question {indexQuestionCourante}: Quel Cétacé produit ce son?</h2>
 
-                    <div className="container mt-2 p-2 rounded" style = {{display:tricheUnpeu ? 'block' : 'none'}}>
-                        <img 
-                        className='img-fluid' 
-                        alt ="Image de la baleine" 
-                        src={`../RESSOURCES${reponseQuestionCourante.medias[0].cheminFichier}`}
-                        />
-                    </div>
-                    <div className='container mt-2 p-2 rounded' style = {{display:'block'}}>
-                        {reponseQuestionCourante.medias.filter(element =>
-                            element.typeMedia === "audio").map((element,index) => (
-                                
-                                    <audio controls className="data-bs-theme=dark" key={index}>
-                                        <source src={`../RESSOURCES${element.cheminFichier}`}
+                                <div className="container mt-2 p-2 rounded" style = {{display:tricheUnpeu ? 'block' : 'none'}}>
+                                    <img 
+                                    className='img-fluid' 
+                                    alt ="Image de la baleine" 
+                                    src={`../RESSOURCES${reponseQuestionCourante.medias[0].cheminFichier}`}
+                                    />
+                                </div>
+                                <div className='container mt-2 p-2 rounded' style = {{display:'block'}}>
+                                    {reponseQuestionCourante.medias.filter(element =>
+                                        element.typeMedia === "audio").map((element,index) => (
+                                            
+                                                <audio controls className="data-bs-theme=dark" key={index}>
+                                                    <source src={`../RESSOURCES${element.cheminFichier}`}
+                                                    type="audio/wav" />
+                                                    Votre navigateur ne supporte pas l'élement audio
+                                                </audio>
+                                            ))
+                                            
+                                    }
+
+                                    <audio controls className="data-bs-theme=dark">
+                                        <source src="../RESSOURCES/audio/2.wav"
                                         type="audio/wav" />
                                         Votre navigateur ne supporte pas l'élement audio
                                     </audio>
-                                ))
-                                
-                        }
+                                </div>
+                                <div className='container mt-2 p-1 rounded' style = {{diplay:'block'}}>
+                                    <Button variant ="info" onClick={(e) => handleTriche(e)} disabled={utilisationIndice >= 2}>
+                                        <FontAwesomeIcon icon={faEye} className="me-2"/>
+                                        Triche un peu
+                                    </Button>
+                                </div>
 
-                        <audio controls className="data-bs-theme=dark">
-                            <source src="../RESSOURCES/audio/2.wav"
-                            type="audio/wav" />
-                            Votre navigateur ne supporte pas l'élement audio
-                        </audio>
-                    </div>
-                    <div className='container mt-2 p-1 rounded' style = {{diplay:'block'}}>
-                        <Button variant ="info" onClick={(e) => handleTriche(e)} disabled={utilisationIndice >= 2}>
-                            <FontAwesomeIcon icon={faEye} className="me-2"/>
-                            Triche un peu
-                        </Button>
-                    </div>
+                                <div className="container mt-4 p-1 rounded">
+                                    <h3>Choisit la bonne réponse:</h3>
+                                </div>
+                                <Form onSubmit={handleSoummission}>
+                                    <div className='row mt-2 p-2 rounded'>
+                                        <div className='col mt-2 p-2 rounded'>
+                                            <h6>Nom Commun:</h6>
+                                            <Options options={optionsNomCommun} name="options1" handler={handleNCchange}/>
+                                        </div>
+                                        <div className='col mt-2 p-2 rounded'>
+                                            <h6>Nom Scientifique:</h6>
+                                            <Options options={optionsNomScientifique} name="options2" handler={handleNSchange}/>
+                                        </div>
+                                        
+                                        <div className='col-4 mt-2 p-2 rounded'>
+                                        </div>
+                                    </div>
 
-                    <div className="container mt-4 p-1 rounded">
-                        <h3>Choisit la bonne réponse:</h3>
-                    </div>
-                    <Form onSubmit={handleSoummission}>
-                        <div className='row mt-2 p-2 rounded'>
-                            <div className='col mt-2 p-2 rounded'>
-                                <h6>Nom Commun:</h6>
-                                <Options options={optionsNomCommun} name="options1" handler={handleNCchange}/>
+                                    <div className='container mt-1 p-2 rounded'>
+                                        <Button 
+                                        variant="dark"
+                                        type="submit"
+                                        onClick={handleSoummission}
+                                        >
+                                            <FontAwesomeIcon icon={faCheck} className="me-2" beat/>
+                                            Soumettre
+                                        </Button>
+                                    </div>
+                                </Form>
                             </div>
-                            <div className='col mt-2 p-2 rounded'>
-                                <h6>Nom Scientifique:</h6>
-                                <Options options={optionsNomScientifique} name="options2" handler={handleNSchange}/>
-                            </div>
-                            
-                            <div className='col-4 mt-2 p-2 rounded'>
-                            </div>
-                        </div>
-
-                        <div className='container mt-1 p-2 rounded'>
-                            <Button 
-                            variant="dark"
-                            type="submit"
-                            onClick={handleSoummission}
-                            >
-                                <FontAwesomeIcon icon={faCheck} className="me-2" beat/>
-                                Soumettre
-                            </Button>
-                        </div>
-                    </Form>
-                </div>
-            </>      
+                </>      
 
         )
 }
@@ -359,10 +418,10 @@ function Feedback({statutQuestion,indicateurSuccess1,indicateurSuccess2,reponseQ
         )
     } else if(statutQuestion === "repondu" && indicateurSuccess1 + indicateurSuccess2 === 0.5){
         return(
-            <>  {`
+            <>  
                 <div className="alert alert-warning" role="alert">
-                    Bien éssayé. Les bonnes réponse était:<p>${reponseQuestionCourante.nomCommun} & <br>${reponseQuestionCourante.nomScientifique}</br></p> 
-                </div>`}
+                    Bien éssayé. Les bonnes réponse était: {reponseQuestionCourante.nomCommun} et {reponseQuestionCourante.nomScientifique}
+                </div>
             </>
         )
     } else if(statutQuestion === "repondu" && indicateurSuccess1 + indicateurSuccess2 === 0){
