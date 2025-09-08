@@ -26,3 +26,7 @@ L'application est constituée de trois couches :
 ├── /Quiz-Cétacé    # frontend en React.js
 ├── api.py    # API 
 ├── BD_baleine.db  # Base de données en SQLite
+
+## Démarrage
+
+Bien vouloir préalablement executer le fichier api.py avant de lancer le script npm start
